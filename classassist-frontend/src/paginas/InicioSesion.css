@@ -1,0 +1,144 @@
+.inicio-sesion-contenedor {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #eef2f7, #dfe7f3);
+    padding: 20px;
+  }
+  
+  .inicio-sesion-tarjeta {
+    width: 100%;
+    max-width: 430px;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  }
+  
+  .inicio-sesion-titulo {
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+  }
+  
+  .inicio-sesion-subtitulo {
+    margin: 0 0 26px 0;
+    text-align: center;
+    font-size: 1rem;
+    color: #4b5563;
+  }
+  
+  .inicio-sesion-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .inicio-sesion-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    transition: 0.2s ease-in-out;
+    background-color: #fff;
+    color: #111827;
+  }
+  
+  .inicio-sesion-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+  
+  .inicio-sesion-boton {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .inicio-sesion-boton:hover {
+    background: #1d4ed8;
+  }
+  
+  .inicio-sesion-boton:active {
+    transform: scale(0.98);
+  }
+  
+  /* Tablet */
+  @media (max-width: 768px) {
+    .inicio-sesion-tarjeta {
+      max-width: 400px;
+      padding: 28px 22px;
+    }
+  
+    .inicio-sesion-titulo {
+      font-size: 2rem;
+    }
+  
+    .inicio-sesion-subtitulo {
+      font-size: 0.95rem;
+    }
+  }
+  
+  /* Celulares */
+  @media (max-width: 480px) {
+    .inicio-sesion-contenedor {
+      padding: 16px;
+    }
+  
+    .inicio-sesion-tarjeta {
+      max-width: 100%;
+      padding: 24px 18px;
+      border-radius: 14px;
+    }
+  
+    .inicio-sesion-titulo {
+      font-size: 1.7rem;
+    }
+  
+    .inicio-sesion-subtitulo {
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+  
+    .inicio-sesion-formulario {
+      gap: 14px;
+    }
+  
+    .inicio-sesion-input {
+      padding: 13px 14px;
+      font-size: 0.95rem;
+    }
+  
+    .inicio-sesion-boton {
+      padding: 13px 14px;
+      font-size: 0.95rem;
+    }
+  }
+  
+  /* Celulares muy pequeños */
+  @media (max-width: 360px) {
+    .inicio-sesion-titulo {
+      font-size: 1.5rem;
+    }
+  
+    .inicio-sesion-subtitulo {
+      font-size: 0.88rem;
+    }
+  
+    .inicio-sesion-tarjeta {
+      padding: 20px 14px;
+    }
+  }
