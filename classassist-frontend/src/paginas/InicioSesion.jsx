@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./InicioSesion.css";
 
 export default function InicioSesion() {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const navigate = useNavigate();
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
@@ -18,10 +20,12 @@ export default function InicioSesion() {
         }
       );
 
-      console.log(respuesta.data);
-      alert("Login exitoso");
+      localStorage.setItem("usuario", JSON.stringify(respuesta.data.usuario));
+
+      navigate("/panel");
     } catch (error) {
-      alert("Error al iniciar sesión");
+      console.error("Error al iniciar sesión:", error);
+      alert("No se pudo iniciar sesión");
     }
   };
 
@@ -40,6 +44,7 @@ export default function InicioSesion() {
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}
             className="inicio-sesion-input"
+            required
           />
 
           <input
@@ -48,6 +53,7 @@ export default function InicioSesion() {
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
             className="inicio-sesion-input"
+            required
           />
 
           <button type="submit" className="inicio-sesion-boton">

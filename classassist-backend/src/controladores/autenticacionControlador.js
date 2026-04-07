@@ -1,68 +1,35 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const pool = require("../configuracion/baseDatos");
+const conexion = require("../configuracion/conexion");
 
-const iniciarSesion = async (req, res) => {
-  try {
-    const { correo, contrasena } = req.body;
+const iniciarSesion = (req, res) => {
+  const { correo, contrasena } = req.body;
 
-    if (!correo || !contrasena) {
-      return res.status(400).json({
-        mensaje: "Correo y contraseña son obligatorios",
-      });
+  const consulta = "SELECT * FROM docentes WHERE correo = ?";
+
+  conexion.query(consulta, [correo], (error, resultados) => {
+    if (error) {
+      console.error("Error en consulta:", error);
+      return res.status(500).json({ mensaje: "Error en el servidor" });
     }
 
-    const [filas] = await pool.query(
-      "SELECT * FROM catedraticos WHERE correo = ?",
-      [correo]
-    );
-
-    if (filas.length === 0) {
-      return res.status(401).json({
-        mensaje: "Correo o contraseña incorrectos",
-      });
+    if (resultados.length === 0) {
+      return res.status(401).json({ mensaje: "Usuario no encontrado" });
     }
 
-    const catedratico = filas[0];
+    const usuario = resultados[0];
 
-    const contrasenaValida = await bcrypt.compare(
-      contrasena,
-      catedratico.contrasena
-    );
-
-    if (!contrasenaValida) {
-      return res.status(401).json({
-        mensaje: "Correo o contraseña incorrectos",
-      });
+    if (usuario.contrasena !== contrasena) {
+      return res.status(401).json({ mensaje: "Contraseña incorrecta" });
     }
 
-    const token = jwt.sign(
-      {
-        id: catedratico.id,
-        nombre: catedratico.nombre,
-        correo: catedratico.correo,
-      },
-      process.env.JWT_CLAVE,
-      { expiresIn: "8h" }
-    );
-
-    res.json({
-      mensaje: "Inicio de sesión exitoso",
-      token,
-      catedratico: {
-        id: catedratico.id,
-        nombre: catedratico.nombre,
-        correo: catedratico.correo,
+    return res.json({
+      mensaje: "Login exitoso",
+      usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
       },
     });
-  } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    res.status(500).json({
-      mensaje: "Error interno del servidor",
-    });
-  }
+  });
 };
 
-module.exports = {
-  iniciarSesion,
-};
+module.exports = { iniciarSesion };
