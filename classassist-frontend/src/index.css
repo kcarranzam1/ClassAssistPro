@@ -1,17 +1,250 @@
+:root {
+  --color-fondo: #f3f6fb;
+  --color-superficie: #ffffff;
+  --color-primario: #2563eb;
+  --color-primario-hover: #1d4ed8;
+  --color-secundario: #0f172a;
+  --color-texto: #1e293b;
+  --color-texto-suave: #64748b;
+  --color-borde: #dbe3ef;
+  --color-exito: #16a34a;
+  --color-alerta: #f59e0b;
+  --color-peligro: #dc2626;
+  --sombra-suave: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --radio-lg: 20px;
+  --radio-md: 14px;
+  --radio-sm: 10px;
+}
+
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html,
 body,
 #root {
-  width: 100%;
+  margin: 0;
+  padding: 0;
   min-height: 100%;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+  color: var(--color-texto);
 }
 
 body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--color-borde);
+  background: #fff;
+  color: var(--color-texto);
+  border-radius: var(--radio-md);
+  padding: 12px 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+button {
+  border: none;
+  border-radius: var(--radio-md);
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.app-page {
+  min-height: 100vh;
+  padding: 32px 16px;
+}
+
+.app-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.app-card {
+  background: var(--color-superficie);
+  border: 1px solid rgba(219, 227, 239, 0.7);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.app-title {
+  margin: 0 0 8px 0;
+  font-size: 2.2rem;
+  color: var(--color-secundario);
+}
+
+.app-subtitle {
   margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 1rem;
+}
+
+.app-section-title {
+  margin: 0 0 14px 0;
+  color: var(--color-secundario);
+  font-size: 1.25rem;
+}
+
+.app-btn-primary {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.app-btn-primary:hover {
+  background: var(--color-primario-hover);
+}
+
+.app-btn-success {
+  background: var(--color-exito);
+  color: #fff;
+}
+
+.app-btn-warning {
+  background: var(--color-alerta);
+  color: #fff;
+}
+
+.app-btn-danger {
+  background: var(--color-peligro);
+  color: #fff;
+}
+
+.app-btn-muted {
+  background: #64748b;
+  color: #fff;
+}
+
+.app-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.app-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.app-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.app-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.app-stat {
+  padding: 22px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid var(--color-borde);
+}
+
+.app-stat h3 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  color: var(--color-texto-suave);
+}
+
+.app-stat p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-secundario);
+}
+
+.app-list-item {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid var(--color-borde);
+  background: #fbfdff;
+}
+
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.app-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: var(--color-primario);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.16);
+}
+
+.app-nav-link:hover {
+  background: var(--color-primario-hover);
+}
+
+@media (max-width: 900px) {
+  .app-grid-4,
+  .app-grid-3,
+  .app-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .app-title {
+    font-size: 1.8rem;
+  }
+}
+
+.app-card,
+.app-list-item,
+.app-stat,
+.app-nav-link,
+button,
+input,
+select,
+textarea {
+  transition: all 0.2s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-1px);
+}
+
+.app-list-item:hover {
+  border-color: #c3d4f7;
+  background: #f8fbff;
 }

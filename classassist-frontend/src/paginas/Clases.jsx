@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LayoutSistema from "../componentes/LayoutSistema";
 
 export default function Clases() {
   const [clases, setClases] = useState([]);
   const [nombre, setNombre] = useState("");
   const [seccion, setSeccion] = useState("");
   const [horario, setHorario] = useState("");
+  const [editandoId, setEditandoId] = useState(null);
 
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
@@ -18,24 +20,62 @@ export default function Clases() {
     }
   };
 
-  const crearClase = async (e) => {
+  const limpiarFormulario = () => {
+    setNombre("");
+    setSeccion("");
+    setHorario("");
+    setEditandoId(null);
+  };
+
+  const guardarClase = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:4000/api/clases", {
-        nombre,
-        seccion,
-        horario,
-        docente_id: usuario?.id || null,
-      });
+      if (editandoId) {
+        await axios.put(`http://localhost:4000/api/clases/${editandoId}`, {
+          nombre,
+          seccion,
+          horario,
+        });
+      } else {
+        await axios.post("http://localhost:4000/api/clases", {
+          nombre,
+          seccion,
+          horario,
+          docente_id: usuario?.id || null,
+        });
+      }
 
-      setNombre("");
-      setSeccion("");
-      setHorario("");
+      limpiarFormulario();
       obtenerClases();
     } catch (error) {
-      console.error("Error al crear clase:", error);
-      alert("No se pudo crear la clase");
+      console.error("Error al guardar clase:", error);
+      alert("No se pudo guardar la clase");
+    }
+  };
+
+  const editarClase = (clase) => {
+    setNombre(clase.nombre);
+    setSeccion(clase.seccion || "");
+    setHorario(clase.horario || "");
+    setEditandoId(clase.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const eliminarClase = async (id) => {
+    const confirmar = window.confirm("¿Seguro que deseas eliminar esta clase?");
+    if (!confirmar) return;
+
+    try {
+      await axios.delete(`http://localhost:4000/api/clases/${id}`);
+      obtenerClases();
+
+      if (editandoId === id) {
+        limpiarFormulario();
+      }
+    } catch (error) {
+      console.error("Error al eliminar clase:", error);
+      alert("No se pudo eliminar la clase");
     }
   };
 
@@ -44,114 +84,116 @@ export default function Clases() {
   }, []);
 
   return (
-    <div style={estilos.contenedor}>
-      <div style={estilos.tarjeta}>
-        <h1 style={estilos.titulo}>Gestión de Clases</h1>
+    <LayoutSistema>
+    <div className="app-page">
+      <div className="app-shell">
+        <div className="app-card" style={{ padding: "28px", marginBottom: "22px" }}>
+          <h1 className="app-title">Gestión de Clases</h1>
+          <p className="app-subtitle">
+            Administra tus clases, secciones y horarios desde un solo lugar.
+          </p>
+        </div>
 
-        <form onSubmit={crearClase} style={estilos.formulario}>
-          <input
-            type="text"
-            placeholder="Nombre de la clase"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            style={estilos.input}
-            required
-          />
+        <div className="app-grid-2">
+          <div className="app-card" style={{ padding: "24px" }}>
+            <h2 className="app-section-title">
+              {editandoId ? "Editar clase" : "Nueva clase"}
+            </h2>
 
-          <input
-            type="text"
-            placeholder="Sección"
-            value={seccion}
-            onChange={(e) => setSeccion(e.target.value)}
-            style={estilos.input}
-          />
+            <form onSubmit={guardarClase} className="app-grid">
+              <input
+                type="text"
+                placeholder="Nombre de la clase"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
 
-          <input
-            type="text"
-            placeholder="Horario"
-            value={horario}
-            onChange={(e) => setHorario(e.target.value)}
-            style={estilos.input}
-          />
+              <input
+                type="text"
+                placeholder="Sección"
+                value={seccion}
+                onChange={(e) => setSeccion(e.target.value)}
+              />
 
-          <button type="submit" style={estilos.boton}>
-            Crear clase
-          </button>
-        </form>
+              <input
+                type="text"
+                placeholder="Horario"
+                value={horario}
+                onChange={(e) => setHorario(e.target.value)}
+              />
 
-        <div style={estilos.lista}>
-          {clases.length === 0 ? (
-            <p style={estilos.textoVacio}>No hay clases registradas todavía.</p>
-          ) : (
-            clases.map((clase) => (
-              <div key={clase.id} style={estilos.item}>
-                <h3 style={estilos.nombreClase}>{clase.nombre}</h3>
-                <p>Sección: {clase.seccion || "Sin sección"}</p>
-                <p>Horario: {clase.horario || "Sin horario"}</p>
+              <div className="app-actions">
+                <button type="submit" className="app-btn-primary">
+                  {editandoId ? "Actualizar clase" : "Crear clase"}
+                </button>
+
+                {editandoId && (
+                  <button
+                    type="button"
+                    className="app-btn-muted"
+                    onClick={limpiarFormulario}
+                  >
+                    Cancelar
+                  </button>
+                )}
               </div>
-            ))
-          )}
+            </form>
+          </div>
+
+          <div className="app-card" style={{ padding: "24px" }}>
+            <h2 className="app-section-title">Resumen</h2>
+
+            <div className="app-grid">
+              <div className="app-stat">
+                <h3>Total de clases</h3>
+                <p>{clases.length}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="app-card" style={{ padding: "24px", marginTop: "22px" }}>
+          <h2 className="app-section-title">Listado de clases</h2>
+
+          <div className="app-grid">
+            {clases.length === 0 ? (
+              <p className="app-subtitle">No hay clases registradas todavía.</p>
+            ) : (
+              clases.map((clase) => (
+                <div key={clase.id} className="app-list-item">
+                  <h3 style={{ marginTop: 0, marginBottom: "10px", color: "#0f172a" }}>
+                    {clase.nombre}
+                  </h3>
+                  <p style={{ margin: "0 0 6px 0" }}>
+                    <strong>Sección:</strong> {clase.seccion || "Sin sección"}
+                  </p>
+                  <p style={{ margin: "0 0 14px 0" }}>
+                    <strong>Horario:</strong> {clase.horario || "Sin horario"}
+                  </p>
+
+                  <div className="app-actions">
+                    <button
+                      className="app-btn-warning"
+                      onClick={() => editarClase(clase)}
+                    >
+                      Editar
+                    </button>
+
+                    <button
+                      className="app-btn-danger"
+                      onClick={() => eliminarClase(clase.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>
+    </LayoutSistema>
   );
 }
-
-const estilos = {
-  contenedor: {
-    minHeight: "100vh",
-    background: "#eef2f7",
-    padding: "30px 16px",
-  },
-  tarjeta: {
-    maxWidth: "900px",
-    margin: "0 auto",
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "16px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-  },
-  titulo: {
-    marginBottom: "20px",
-    color: "#1f2937",
-  },
-  formulario: {
-    display: "grid",
-    gap: "12px",
-    marginBottom: "30px",
-  },
-  input: {
-    padding: "12px",
-    borderRadius: "10px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-    width: "100%",
-  },
-  boton: {
-    padding: "12px",
-    borderRadius: "10px",
-    border: "none",
-    background: "#2563eb",
-    color: "#fff",
-    fontWeight: "bold",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-  lista: {
-    display: "grid",
-    gap: "16px",
-  },
-  item: {
-    padding: "16px",
-    borderRadius: "12px",
-    border: "1px solid #ddd",
-    background: "#f9fafb",
-  },
-  nombreClase: {
-    margin: "0 0 10px 0",
-    color: "#1f2937",
-  },
-  textoVacio: {
-    color: "#6b7280",
-  },
-};
