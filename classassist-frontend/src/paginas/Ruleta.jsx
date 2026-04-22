@@ -13,7 +13,7 @@ export default function Ruleta() {
 
   const obtenerSesiones = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/grupos/sesiones");
+      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/grupos/sesiones");
       setSesiones(respuesta.data);
     } catch (error) {
       console.error(error);
@@ -25,7 +25,7 @@ export default function Ruleta() {
 
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/ruleta/participaciones/${sesionId}`
+        `${import.meta.env.VITE_API_URL}/api/ruleta/participaciones/${sesionId}`
       );
       setParticipaciones(respuesta.data);
     } catch (error) {
@@ -45,7 +45,7 @@ export default function Ruleta() {
     setTimeout(async () => {
       try {
         const respuesta = await axios.get(
-          `http://localhost:4000/api/ruleta/aleatorio/${sesionSeleccionada}`
+          `${import.meta.env.VITE_API_URL}/api/ruleta/aleatorio/${sesionSeleccionada}`
         );
         setEstudianteSeleccionado(respuesta.data);
       } catch (error) {
@@ -64,7 +64,7 @@ export default function Ruleta() {
     }
 
     try {
-      await axios.post("http://localhost:4000/api/ruleta/guardar", {
+      await axios.post("${import.meta.env.VITE_API_URL}/api/ruleta/guardar", {
         sesion_id: sesionSeleccionada,
         estudiante_id: estudianteSeleccionado.id,
         nota,

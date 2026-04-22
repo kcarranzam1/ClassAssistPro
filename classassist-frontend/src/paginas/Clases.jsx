@@ -13,7 +13,7 @@ export default function Clases() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
       setClases(respuesta.data);
     } catch (error) {
       console.error("Error al obtener clases:", error);
@@ -32,13 +32,13 @@ export default function Clases() {
 
     try {
       if (editandoId) {
-        await axios.put(`http://localhost:4000/api/clases/${editandoId}`, {
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/clases/${editandoId}`, {
           nombre,
           seccion,
           horario,
         });
       } else {
-        await axios.post("http://localhost:4000/api/clases", {
+        await axios.post("${import.meta.env.VITE_API_URL}/api/clases", {
           nombre,
           seccion,
           horario,
@@ -67,7 +67,7 @@ export default function Clases() {
     if (!confirmar) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/clases/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/clases/${id}`);
       obtenerClases();
 
       if (editandoId === id) {

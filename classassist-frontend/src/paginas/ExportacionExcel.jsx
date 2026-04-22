@@ -8,7 +8,7 @@ export default function ExportacionExcel() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/clases");
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {
@@ -30,7 +30,7 @@ export default function ExportacionExcel() {
     }
 
     window.open(
-      `http://localhost:4000/api/exportacion/${tipo}/${claseSeleccionada}`,
+      `${import.meta.env.VITE_API_URL}/api/exportacion/${tipo}/${claseSeleccionada}`,
       "_blank"
     );
   };

@@ -21,7 +21,7 @@ const crearSesionQR = async (req, res) => {
     }
 
     const sesion_id = resultado.insertId;
-    const enlace = `http://localhost:5173/asistencia/${token}`;
+    const enlace = `${process.env.FRONTEND_URL}/asistencia/${token}`;
 
     try {
       const qrBase64 = await QRCode.toDataURL(enlace);
@@ -195,7 +195,7 @@ const obtenerAsistenciasPorSesion = (req, res) => {
     const asistenciasConUrl = resultados.map((item) => ({
       ...item,
       selfie_url: item.selfie
-        ? `http://localhost:4000/selfies/${item.selfie}`
+        ? `${process.env.FRONTEND_URL}/selfies/${item.selfie}`
         : null,
     }));
 

@@ -11,7 +11,7 @@ export default function Grupos() {
 
   const obtenerSesiones = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/grupos/sesiones");
+      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/grupos/sesiones");
       setSesiones(respuesta.data);
     } catch (error) {
       console.error("Error al obtener sesiones:", error);
@@ -22,7 +22,7 @@ export default function Grupos() {
     if (!sesionId) return;
 
     try {
-      const respuesta = await axios.get(`http://localhost:4000/api/grupos/${sesionId}`);
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/grupos/${sesionId}`);
       setGrupos(respuesta.data);
     } catch (error) {
       console.error("Error al obtener grupos:", error);
@@ -37,7 +37,7 @@ export default function Grupos() {
     }
 
     try {
-      const respuesta = await axios.post("http://localhost:4000/api/grupos/generar", {
+      const respuesta = await axios.post("${import.meta.env.VITE_API_URL}/api/grupos/generar", {
         sesion_id: sesionSeleccionada,
         modo,
         valor,
@@ -52,7 +52,7 @@ export default function Grupos() {
 
   const guardarNotaGrupo = async (grupoId, nota) => {
     try {
-      await axios.put(`http://localhost:4000/api/grupos/nota/${grupoId}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/grupos/nota/${grupoId}`, {
         nota,
       });
 

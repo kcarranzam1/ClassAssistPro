@@ -12,7 +12,7 @@ export default function Asistencias() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/clases");
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {
@@ -31,7 +31,7 @@ export default function Asistencias() {
 
     try {
       const respuesta = await axios.post(
-        "http://localhost:4000/api/asistencias/sesion",
+        "${import.meta.env.VITE_API_URL}/api/asistencias/sesion",
         {
           clase_id: claseSeleccionada,
         }
@@ -50,7 +50,7 @@ export default function Asistencias() {
   const obtenerAsistencias = async (idSesion) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/asistencias/lista/${idSesion}`
+        `${import.meta.env.VITE_API_URL}/api/asistencias/lista/${idSesion}`
       );
       setAsistencias(respuesta.data);
     } catch (error) {

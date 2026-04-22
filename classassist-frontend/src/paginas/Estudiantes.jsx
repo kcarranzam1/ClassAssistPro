@@ -17,7 +17,7 @@ export default function Estudiantes() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get("h${import.meta.env.VITE_API_URL}/api/clases");
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {
@@ -33,7 +33,7 @@ export default function Estudiantes() {
 
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/estudiantes?clase_id=${claseId}`
+        `${import.meta.env.VITE_API_URL}/api/estudiantes?clase_id=${claseId}`
       );
       setEstudiantes(respuesta.data);
     } catch (error) {
@@ -59,14 +59,14 @@ export default function Estudiantes() {
 
     try {
       if (editandoId) {
-        await axios.put(`http://localhost:4000/api/estudiantes/${editandoId}`, {
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/estudiantes/${editandoId}`, {
           numero_lista: numeroLista,
           carne,
           nombre,
           correo,
         });
       } else {
-        await axios.post("http://localhost:4000/api/estudiantes", {
+        await axios.post("${import.meta.env.VITE_API_URL}/api/estudiantes", {
           numero_lista: numeroLista,
           carne,
           nombre,
@@ -100,7 +100,7 @@ export default function Estudiantes() {
 
     try {
       const respuesta = await axios.post(
-        "http://localhost:4000/api/estudiantes/importar-excel",
+        "${import.meta.env.VITE_API_URL}/api/estudiantes/importar-excel",
         formData,
         {
           headers: {
@@ -132,7 +132,7 @@ export default function Estudiantes() {
     if (!confirmar) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/estudiantes/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/estudiantes/${id}`);
       obtenerEstudiantes(claseSeleccionada);
 
       if (editandoId === id) {
