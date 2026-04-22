@@ -3,11 +3,12 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://classassist-frontend.netlify.app"
   ]
+}));
 app.use(express.json());
 app.use("/selfies", express.static("selfies"));
 
