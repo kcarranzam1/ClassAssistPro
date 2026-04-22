@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
   origin: [
     "http://localhost:5173",
-    "https://TU-FRONTEND.netlify.app"
+    "https://classassist-frontend.netlify.app"
   ]
 app.use(express.json());
 app.use("/selfies", express.static("selfies"));
