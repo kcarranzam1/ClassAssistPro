@@ -8,14 +8,17 @@ export default function ExportacionExcel() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get('${import.meta.env.VITE_API_URL}/api/clases');
-      setClases(respuesta.data);
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
+      const data = Array.isArray(respuesta.data) ? respuesta.data : [];
 
-      if (respuesta.data.length > 0 && !claseSeleccionada) {
-        setClaseSeleccionada(String(respuesta.data[0].id));
+      setClases(data);
+
+      if (data.length > 0 && !claseSeleccionada) {
+        setClaseSeleccionada(String(data[0].id));
       }
     } catch (error) {
       console.error("Error al obtener clases:", error);
+      setClases([]);
     }
   };
 
@@ -53,11 +56,15 @@ export default function ExportacionExcel() {
               value={claseSeleccionada}
               onChange={(e) => setClaseSeleccionada(e.target.value)}
             >
-              {clases.map((clase) => (
-                <option key={clase.id} value={clase.id}>
-                  {clase.nombre}
-                </option>
-              ))}
+              {Array.isArray(clases) && clases.length > 0 ? (
+                clases.map((clase) => (
+                  <option key={clase.id} value={clase.id}>
+                    {clase.nombre}
+                  </option>
+                ))
+              ) : (
+                <option value="">No hay clases disponibles</option>
+              )}
             </select>
           </div>
 
