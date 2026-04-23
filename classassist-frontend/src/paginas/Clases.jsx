@@ -9,6 +9,9 @@ export default function Clases() {
   const [horario, setHorario] = useState("");
   const [editandoId, setEditandoId] = useState(null);
 
+  const usuarioGuardado = localStorage.getItem("usuario");
+  const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+
   const obtenerClases = async () => {
     try {
       const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
@@ -29,18 +32,25 @@ export default function Clases() {
   const guardarClase = async (e) => {
     e.preventDefault();
 
+    if (!usuario || !usuario.id) {
+      alert("No se encontró el usuario de sesión");
+      return;
+    }
+
     try {
       if (editandoId) {
         await axios.put(`${import.meta.env.VITE_API_URL}/api/clases/${editandoId}`, {
           nombre,
           seccion,
           horario,
+          docente_id: usuario.id,
         });
       } else {
         await axios.post(`${import.meta.env.VITE_API_URL}/api/clases`, {
           nombre,
           seccion,
           horario,
+          docente_id: usuario.id,
         });
       }
 
