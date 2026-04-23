@@ -39,6 +39,7 @@ const crearEstudiante = (req, res) => {
     [numero_lista, carne, nombre, correo, clase_id],
     (error, resultado) => {
       if (error) {
+        console.error("Error al crear estudiante:", error);
         return res.status(500).json({ mensaje: "Error al crear estudiante" });
       }
 
@@ -60,8 +61,9 @@ const actualizarEstudiante = (req, res) => {
   conexion.query(
     consulta,
     [numero_lista, carne, nombre, correo, id],
-    (error, resultado) => {
+    (error) => {
       if (error) {
+        console.error("Error al actualizar estudiante:", error);
         return res.status(500).json({ mensaje: "Error al actualizar estudiante" });
       }
 
@@ -75,8 +77,9 @@ const eliminarEstudiante = (req, res) => {
 
   const consulta = "DELETE FROM estudiantes WHERE id = ?";
 
-  conexion.query(consulta, [id], (error, resultado) => {
+  conexion.query(consulta, [id], (error) => {
     if (error) {
+      console.error("Error al eliminar estudiante:", error);
       return res.status(500).json({ mensaje: "Error al eliminar estudiante" });
     }
 
@@ -109,10 +112,21 @@ const importarEstudiantesExcel = (req, res) => {
     const estudiantesAInsertar = [];
 
     for (const fila of datos) {
-      const numero_lista = fila["No."] || fila["No"] || "";
-      const carne = fila["Carné"] || fila["Carne"] || "";
-      const nombre = fila["Estudiante"] || "";
-      const correo = fila["Correo Electrónico"] || fila["Correo Electronico"] || fila["Correo"] || "";
+      const numero_lista =
+        fila["No."] || fila["No"] || fila["numero_lista"] || "";
+
+      const carne =
+        fila["Carné"] || fila["Carne"] || fila["carne"] || "";
+
+      const nombre =
+        fila["Estudiante"] || fila["nombre"] || "";
+
+      const correo =
+        fila["Correo Electrónico"] ||
+        fila["Correo Electronico"] ||
+        fila["Correo"] ||
+        fila["correo"] ||
+        "";
 
       if (!carne || !nombre) {
         continue;
@@ -141,6 +155,7 @@ const importarEstudiantesExcel = (req, res) => {
       fs.unlinkSync(req.file.path);
 
       if (error) {
+        console.error("Error al importar estudiantes:", error);
         return res.status(500).json({ mensaje: "Error al importar estudiantes" });
       }
 
@@ -154,7 +169,7 @@ const importarEstudiantesExcel = (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    console.error(error);
+    console.error("Error al procesar el archivo Excel:", error);
     res.status(500).json({ mensaje: "Error al procesar el archivo Excel" });
   }
 };
