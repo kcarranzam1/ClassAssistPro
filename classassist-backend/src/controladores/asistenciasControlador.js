@@ -1,6 +1,12 @@
 const conexion = require("../configuracion/conexion");
 const QRCode = require("qrcode");
 
+const FRONTEND_URL =
+  process.env.FRONTEND_URL || "https://classassist-frontend.netlify.app";
+
+const BACKEND_URL =
+  process.env.BACKEND_URL || "https://classassist-backend.onrender.com";
+
 const crearSesionQR = async (req, res) => {
   const { clase_id } = req.body;
 
@@ -21,7 +27,7 @@ const crearSesionQR = async (req, res) => {
     }
 
     const sesion_id = resultado.insertId;
-    const enlace = `${process.env.FRONTEND_URL}/asistencia/${token}`;
+    const enlace = `${FRONTEND_URL}/asistencia/${token}`;
 
     try {
       const qrBase64 = await QRCode.toDataURL(enlace);
@@ -70,6 +76,7 @@ const obtenerSesionPorToken = (req, res) => {
     res.json(resultados[0]);
   });
 };
+
 const obtenerEstudiantesPorClase = (req, res) => {
   const { clase_id } = req.params;
 
@@ -161,7 +168,7 @@ const registrarAsistencia = (req, res) => {
             return res.json({
               mensaje: "Asistencia registrada correctamente",
               id: resultadoInsert.insertId,
-              selfie: selfie ? `/selfies/${selfie}` : null,
+              selfie: selfie ? `${BACKEND_URL}/selfies/${selfie}` : null,
             });
           }
         );
@@ -194,9 +201,7 @@ const obtenerAsistenciasPorSesion = (req, res) => {
 
     const asistenciasConUrl = resultados.map((item) => ({
       ...item,
-      selfie_url: item.selfie
-        ? `${process.env.FRONTEND_URL}/selfies/${item.selfie}`
-        : null,
+      selfie_url: item.selfie ? `${BACKEND_URL}/selfies/${item.selfie}` : null,
     }));
 
     res.json(asistenciasConUrl);
