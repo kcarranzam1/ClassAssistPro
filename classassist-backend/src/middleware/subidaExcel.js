@@ -1,9 +1,16 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+
+const carpetaUploads = path.join(__dirname, "../../uploads");
+
+if (!fs.existsSync(carpetaUploads)) {
+  fs.mkdirSync(carpetaUploads, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, carpetaUploads);
   },
   filename: (req, file, cb) => {
     const nombreUnico = Date.now() + path.extname(file.originalname);

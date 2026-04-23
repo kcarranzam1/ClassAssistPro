@@ -99,6 +99,7 @@ const importarEstudiantesExcel = (req, res) => {
   }
 
   try {
+    console.log("Archivo recibido en:", req.file.path);
     const workbook = XLSX.readFile(req.file.path);
     const nombreHoja = workbook.SheetNames[0];
     const hoja = workbook.Sheets[nombreHoja];
