@@ -12,7 +12,7 @@ export default function InicioSesion() {
 
     try {
       const respuesta = await axios.post(
-        "http://localhost:4000/api/autenticacion/iniciar-sesion",
+        `${import.meta.env.VITE_API_URL}/api/autenticacion/iniciar-sesion`,
         {
           correo,
           contrasena,
