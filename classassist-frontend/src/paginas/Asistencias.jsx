@@ -12,14 +12,17 @@ export default function Asistencias() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get('${import.meta.env.VITE_API_URL}/api/clases');
-      setClases(respuesta.data);
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
+      const data = Array.isArray(respuesta.data) ? respuesta.data : [];
 
-      if (respuesta.data.length > 0 && !claseSeleccionada) {
-        setClaseSeleccionada(String(respuesta.data[0].id));
+      setClases(data);
+
+      if (data.length > 0 && !claseSeleccionada) {
+        setClaseSeleccionada(String(data[0].id));
       }
     } catch (error) {
       console.error("Error al obtener clases:", error);
+      setClases([]);
     }
   };
 
@@ -31,16 +34,19 @@ export default function Asistencias() {
 
     try {
       const respuesta = await axios.post(
-        "${import.meta.env.VITE_API_URL}/api/asistencias/sesion",
+        `${import.meta.env.VITE_API_URL}/api/asistencias/sesion`,
         {
           clase_id: claseSeleccionada,
         }
       );
 
-      setQr(respuesta.data.qr);
-      setEnlace(respuesta.data.enlace);
-      setSesionId(respuesta.data.sesion_id);
-      obtenerAsistencias(respuesta.data.sesion_id);
+      setQr(respuesta.data.qr || "");
+      setEnlace(respuesta.data.enlace || "");
+      setSesionId(respuesta.data.sesion_id || null);
+
+      if (respuesta.data.sesion_id) {
+        obtenerAsistencias(respuesta.data.sesion_id);
+      }
     } catch (error) {
       console.error("Error al crear sesión:", error);
       alert("No se pudo crear la sesión QR");
@@ -48,11 +54,13 @@ export default function Asistencias() {
   };
 
   const obtenerAsistencias = async (idSesion) => {
+    if (!idSesion) return;
+
     try {
       const respuesta = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/asistencias/lista/${idSesion}`
       );
-      setAsistencias(respuesta.data);
+      setAsistencias(Array.isArray(respuesta.data) ? respuesta.data : []);
     } catch (error) {
       console.error("Error al obtener asistencias:", error);
       setAsistencias([]);
@@ -97,11 +105,12 @@ export default function Asistencias() {
                   value={claseSeleccionada}
                   onChange={(e) => setClaseSeleccionada(e.target.value)}
                 >
-                  {clases.map((clase) => (
-                    <option key={clase.id} value={clase.id}>
-                      {clase.nombre}
-                    </option>
-                  ))}
+                  {Array.isArray(clases) &&
+                    clases.map((clase) => (
+                      <option key={clase.id} value={clase.id}>
+                        {clase.nombre}
+                      </option>
+                    ))}
                 </select>
 
                 <button onClick={crearSesion} className="app-btn-primary">
