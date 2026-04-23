@@ -9,14 +9,13 @@ export default function Clases() {
   const [horario, setHorario] = useState("");
   const [editandoId, setEditandoId] = useState(null);
 
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-
   const obtenerClases = async () => {
     try {
       const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
-      setClases(respuesta.data);
+      setClases(Array.isArray(respuesta.data) ? respuesta.data : []);
     } catch (error) {
       console.error("Error al obtener clases:", error);
+      setClases([]);
     }
   };
 
@@ -42,7 +41,6 @@ export default function Clases() {
           nombre,
           seccion,
           horario,
-          docente_id: usuario?.id || null,
         });
       }
 
@@ -55,7 +53,7 @@ export default function Clases() {
   };
 
   const editarClase = (clase) => {
-    setNombre(clase.nombre);
+    setNombre(clase.nombre || "");
     setSeccion(clase.seccion || "");
     setHorario(clase.horario || "");
     setEditandoId(clase.id);
@@ -85,115 +83,125 @@ export default function Clases() {
 
   return (
     <LayoutSistema>
-    <div className="app-page">
-      <div className="app-shell">
-        <div className="app-card" style={{ padding: "28px", marginBottom: "22px" }}>
-          <h1 className="app-title">Gestión de Clases</h1>
-          <p className="app-subtitle">
-            Administra tus clases, secciones y horarios desde un solo lugar.
-          </p>
-        </div>
-
-        <div className="app-grid-2">
-          <div className="app-card" style={{ padding: "24px" }}>
-            <h2 className="app-section-title">
-              {editandoId ? "Editar clase" : "Nueva clase"}
-            </h2>
-
-            <form onSubmit={guardarClase} className="app-grid">
-              <input
-                type="text"
-                placeholder="Nombre de la clase"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
-              />
-
-              <input
-                type="text"
-                placeholder="Sección"
-                value={seccion}
-                onChange={(e) => setSeccion(e.target.value)}
-              />
-
-              <input
-                type="text"
-                placeholder="Horario"
-                value={horario}
-                onChange={(e) => setHorario(e.target.value)}
-              />
-
-              <div className="app-actions">
-                <button type="submit" className="app-btn-primary">
-                  {editandoId ? "Actualizar clase" : "Crear clase"}
-                </button>
-
-                {editandoId && (
-                  <button
-                    type="button"
-                    className="app-btn-muted"
-                    onClick={limpiarFormulario}
-                  >
-                    Cancelar
-                  </button>
-                )}
-              </div>
-            </form>
+      <div className="app-page">
+        <div className="app-shell">
+          <div className="app-card" style={{ padding: "28px", marginBottom: "22px" }}>
+            <h1 className="app-title">Gestión de Clases</h1>
+            <p className="app-subtitle">
+              Administra tus clases, secciones y horarios desde un solo lugar.
+            </p>
           </div>
 
-          <div className="app-card" style={{ padding: "24px" }}>
-            <h2 className="app-section-title">Resumen</h2>
+          <div className="app-grid-2">
+            <div className="app-card" style={{ padding: "24px" }}>
+              <h2 className="app-section-title">
+                {editandoId ? "Editar clase" : "Nueva clase"}
+              </h2>
 
-            <div className="app-grid">
+              <form onSubmit={guardarClase} className="app-grid">
+                <input
+                  type="text"
+                  placeholder="Nombre de la clase"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
+                />
+
+                <input
+                  type="text"
+                  placeholder="Sección"
+                  value={seccion}
+                  onChange={(e) => setSeccion(e.target.value)}
+                  required
+                />
+
+                <input
+                  type="text"
+                  placeholder="Horario"
+                  value={horario}
+                  onChange={(e) => setHorario(e.target.value)}
+                  required
+                />
+
+                <div className="app-actions">
+                  <button type="submit" className="app-btn-primary">
+                    {editandoId ? "Actualizar clase" : "Crear clase"}
+                  </button>
+
+                  {editandoId && (
+                    <button
+                      type="button"
+                      className="app-btn-muted"
+                      onClick={limpiarFormulario}
+                    >
+                      Cancelar
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="app-card" style={{ padding: "24px" }}>
+              <h2 className="app-section-title">Resumen</h2>
+
               <div className="app-stat">
                 <h3>Total de clases</h3>
                 <p>{clases.length}</p>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="app-card" style={{ padding: "24px", marginTop: "22px" }}>
-          <h2 className="app-section-title">Listado de clases</h2>
+          <div className="app-card" style={{ padding: "24px", marginTop: "22px" }}>
+            <h2 className="app-section-title">Listado de clases</h2>
 
-          <div className="app-grid">
-            {clases.length === 0 ? (
-              <p className="app-subtitle">No hay clases registradas todavía.</p>
-            ) : (
-              clases.map((clase) => (
-                <div key={clase.id} className="app-list-item">
-                  <h3 style={{ marginTop: 0, marginBottom: "10px", color: "#0f172a" }}>
-                    {clase.nombre}
-                  </h3>
-                  <p style={{ margin: "0 0 6px 0" }}>
-                    <strong>Sección:</strong> {clase.seccion || "Sin sección"}
-                  </p>
-                  <p style={{ margin: "0 0 14px 0" }}>
-                    <strong>Horario:</strong> {clase.horario || "Sin horario"}
-                  </p>
-
-                  <div className="app-actions">
-                    <button
-                      className="app-btn-warning"
-                      onClick={() => editarClase(clase)}
-                    >
-                      Editar
-                    </button>
-
-                    <button
-                      className="app-btn-danger"
-                      onClick={() => eliminarClase(clase.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
+            <div className="app-table-wrap">
+              <table className="app-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Sección</th>
+                    <th>Horario</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(clases) && clases.length > 0 ? (
+                    clases.map((clase) => (
+                      <tr key={clase.id}>
+                        <td>{clase.nombre}</td>
+                        <td>{clase.seccion}</td>
+                        <td>{clase.horario}</td>
+                        <td>
+                          <div className="app-actions">
+                            <button
+                              className="app-btn-warning"
+                              onClick={() => editarClase(clase)}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              className="app-btn-danger"
+                              onClick={() => eliminarClase(clase.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" style={{ textAlign: "center" }}>
+                        No hay clases registradas
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </LayoutSistema>
   );
 }
