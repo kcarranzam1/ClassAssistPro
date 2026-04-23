@@ -13,7 +13,7 @@ export default function Ruleta() {
 
   const obtenerSesiones = async () => {
     try {
-      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/grupos/sesiones");
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/grupos/sesiones`);
       setSesiones(respuesta.data);
     } catch (error) {
       console.error(error);
@@ -64,7 +64,7 @@ export default function Ruleta() {
     }
 
     try {
-      await axios.post("${import.meta.env.VITE_API_URL}/api/ruleta/guardar", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/ruleta/guardar`, {
         sesion_id: sesionSeleccionada,
         estudiante_id: estudianteSeleccionado.id,
         nota,

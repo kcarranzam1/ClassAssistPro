@@ -14,7 +14,7 @@ export default function PantallaClase() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {
@@ -28,7 +28,7 @@ export default function PantallaClase() {
   const obtenerEstudiantes = async (claseId) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/estudiantes?clase_id=${claseId}`
+        `${import.meta.env.VITE_API_URL}/api/estudiantes?clase_id=${claseId}`
       );
       setEstudiantes(respuesta.data);
     } catch (error) {
@@ -40,7 +40,7 @@ export default function PantallaClase() {
   const obtenerUltimaSesion = async (claseId) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/asistencias/ultima-sesion/${claseId}`
+        `${import.meta.env.VITE_API_URL}/api/asistencias/ultima-sesion/${claseId}`
       );
 
       setUltimaSesion(respuesta.data);
@@ -66,7 +66,7 @@ export default function PantallaClase() {
   const obtenerAsistencias = async (sesionId) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/asistencias/lista/${sesionId}`
+        `${import.meta.env.VITE_API_URL}/api/asistencias/lista/${sesionId}`
       );
       setAsistencias(respuesta.data);
     } catch (error) {
@@ -78,7 +78,7 @@ export default function PantallaClase() {
   const obtenerParticipaciones = async (sesionId) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/ruleta/participaciones/${sesionId}`
+        `${import.meta.env.VITE_API_URL}/api/ruleta/participaciones/${sesionId}`
       );
       setParticipaciones(respuesta.data);
     } catch (error) {
@@ -90,7 +90,7 @@ export default function PantallaClase() {
   const obtenerGrupos = async (sesionId) => {
     try {
       const respuesta = await axios.get(
-        `http://localhost:4000/api/grupos/${sesionId}`
+        `${import.meta.env.VITE_API_URL}/api/grupos/${sesionId}`
       );
       setGrupos(respuesta.data);
     } catch (error) {

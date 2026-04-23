@@ -9,7 +9,7 @@ export default function Ranking() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("http://localhost:4000/api/clases");
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/clases`);
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {
@@ -24,7 +24,7 @@ export default function Ranking() {
     if (!claseId) return;
 
     try {
-      const respuesta = await axios.get(`http://localhost:4000/api/ranking/${claseId}`);
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/ranking/${claseId}`);
       setRanking(respuesta.data);
     } catch (error) {
       console.error("Error al obtener ranking:", error);

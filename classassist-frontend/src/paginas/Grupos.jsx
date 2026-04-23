@@ -11,7 +11,7 @@ export default function Grupos() {
 
   const obtenerSesiones = async () => {
     try {
-      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/grupos/sesiones");
+      const respuesta = await axios.get(`${import.meta.env.VITE_API_URL}/api/grupos/sesiones`);
       setSesiones(respuesta.data);
     } catch (error) {
       console.error("Error al obtener sesiones:", error);
@@ -37,7 +37,7 @@ export default function Grupos() {
     }
 
     try {
-      const respuesta = await axios.post("${import.meta.env.VITE_API_URL}/api/grupos/generar", {
+      const respuesta = await axios.post(`${import.meta.env.VITE_API_URL}/api/grupos/generar`, {
         sesion_id: sesionSeleccionada,
         modo,
         valor,

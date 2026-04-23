@@ -17,14 +17,14 @@ export default function RegistroAsistencia() {
         setCargando(true);
 
         const respuestaSesion = await axios.get(
-          `http://localhost:4000/api/asistencias/sesion/${token}`
+          `${import.meta.env.VITE_API_URL}/api/asistencias/sesion/${token}`
         );
 
         const datosSesion = respuestaSesion.data;
         setSesion(datosSesion);
 
         const respuestaEstudiantes = await axios.get(
-          `http://localhost:4000/api/asistencias/estudiantes-clase/${datosSesion.clase_id}`
+          `${import.meta.env.VITE_API_URL}/api/asistencias/estudiantes-clase/${datosSesion.clase_id}`
         );
 
         setEstudiantes(respuestaEstudiantes.data);
@@ -55,7 +55,7 @@ export default function RegistroAsistencia() {
 
     try {
       const respuesta = await axios.post(
-        "http://localhost:4000/api/asistencias/registrar",
+        `${import.meta.env.VITE_API_URL}/api/asistencias/registrar`,
         formData,
         {
           headers: {

@@ -12,7 +12,7 @@ export default function Asistencias() {
 
   const obtenerClases = async () => {
     try {
-      const respuesta = await axios.get("${import.meta.env.VITE_API_URL}/api/clases");
+      const respuesta = await axios.get('${import.meta.env.VITE_API_URL}/api/clases');
       setClases(respuesta.data);
 
       if (respuesta.data.length > 0 && !claseSeleccionada) {

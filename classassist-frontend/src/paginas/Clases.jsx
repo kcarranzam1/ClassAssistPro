@@ -38,7 +38,7 @@ export default function Clases() {
           horario,
         });
       } else {
-        await axios.post("${import.meta.env.VITE_API_URL}/api/clases", {
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/clases`, {
           nombre,
           seccion,
           horario,
